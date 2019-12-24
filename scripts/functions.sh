@@ -1,0 +1,12 @@
+docker_build() {
+  echo $GCLOUD_SERVICE_KEY > auth.json
+  cat auth.json | docker login -u _json_key --password-stdin https://$REGISTRY
+
+  docker build -t "$REGISTRY/$GOOGLE_PROJECT_ID/$CIRCLE_PROJECT_REPONAME:$CIRCLE_BRANCH" .
+  docker push "$REGISTRY/$GOOGLE_PROJECT_ID/$CIRCLE_PROJECT_REPONAME:$CIRCLE_BRANCH-$CIRCLE_BUILD_NUM"
+
+  if [ "$CIRCLE_BRANCH" = "master" ] ; then
+    docker tag "$REGISTRY/$GOOGLE_PROJECT_ID/$CIRCLE_PROJECT_REPONAME:$CIRCLE_BRANCH" "$REGISTRY/$GOOGLE_PROJECT_ID/$CIRCLE_PROJECT_REPONAME:latest"
+    docker push "$REGISTRY/$GOOGLE_PROJECT_ID/$CIRCLE_PROJECT_REPONAME:latest"
+  fi
+}
