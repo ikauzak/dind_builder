@@ -1,4 +1,4 @@
-# Docker builder image
+# Docker image builder
 
 This is a docker in docker in docker image for building images with CircleCi variables and Google Container Registry (GCR) as default registry.
 
@@ -62,3 +62,4 @@ workflows:
   build_and_push_image:
     jobs:
       - build
+```
