@@ -8,7 +8,16 @@ This is a docker in docker in docker image for building images with CircleCi var
 `REGISTRY`= The registry url (eg: `gcp.io`).
 `GOOGLE_PROJECT_ID`= The google project id where the image will be pushed to.
 
-**PS: Use `REGISTRY_AUTH_KEY` and `GOOGLE_PROJECT_ID` as environment variables in the project pipeline.**
+**PS: Use `REGISTRY_AUTH_KEY` and `GOOGLE_PROJECT_ID` as environment 	variables in the project pipeline.**
+
+## Extra variables:
+`DOCKERFILE`= path/to/Dockerfile
+`BUILD_CONTEXT` = path/to/build_context
+
+eg:
+`DOCKERFILE`= services/webapp/Dockerfile
+`BUILD_CONTEXT`= services/webapp/
+
 ## Image tag:
 
 This project will tag your image as follow:
@@ -22,6 +31,7 @@ eg: `dind_builder:latest`
 ## How to use:
 
 1 - `source /scripts/functions.sh`
+
 2 - Use the `docker_build`function
 
 ## CircleCI pipeline example:
@@ -32,6 +42,8 @@ jobs:
     docker:
       - image: us.gcr.io/infra-dev-challenge/dind-builder:latest
     environment:
+      DOCKERFILE: services/webapp/Dockerfile
+      BUILD_CONTEXT: services/webapp/
       REGISTRY: gcr.io
     steps:
       - checkout
