@@ -48,7 +48,7 @@ jobs:
     environment:
       DOCKERFILE: services/webapp/Dockerfile
       BUILD_CONTEXT: services/webapp/
-      REGISTRY: gcr.io
+      REGISTRY: us.gcr.io
     steps:
       - checkout
       - setup_remote_docker
