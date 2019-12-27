@@ -19,7 +19,7 @@ docker_build() {
   fi
 
   #.$(date +%Y%m%d)
-  docker build -t "$REGISTRY/$IMAGE:$IMAGE_TAG" -f "$DOCKERFILE $BUILD_CONTEXT"
+  docker build -t "$REGISTRY/$IMAGE:$IMAGE_TAG" -f "$DOCKERFILE" "$BUILD_CONTEXT"
   docker push "$REGISTRY/$IMAGE:$IMAGE_TAG"
 
   if [ "$IMAGE_TAG" = "master" ] ; then
