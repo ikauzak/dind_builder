@@ -2,6 +2,14 @@ docker_build() {
   echo $REGISTRY_AUTH_KEY | base64 -d > auth.json
   cat auth.json | docker login -u _json_key --password-stdin https://$REGISTRY
 
+  if [ -z "$IMAGE" ]; then
+    IMAGE="$CI_PROJECT_PATH_SLUG"
+  fi
+
+  if [ -z "$IMAGE_TAG" ]; then
+    IMAGE_TAG="$CI_COMMIT_REF_SLUG"
+  fi
+
   if [ -z "$DOCKERFILE" ]; then
     DOCKERFILE='Dockerfile'
   fi
@@ -10,11 +18,12 @@ docker_build() {
     BUILD_CONTEXT='.'
   fi
 
-  docker build -t "$REGISTRY/$GOOGLE_PROJECT_ID/$CIRCLE_PROJECT_REPONAME:$CIRCLE_USERNAME.$(date +%Y%m%d).$CIRCLE_BRANCH" -f $DOCKERFILE $BUILD_CONTEXT
-  docker push "$REGISTRY/$GOOGLE_PROJECT_ID/$CIRCLE_PROJECT_REPONAME:$CIRCLE_USERNAME.$(date +%Y%m%d).$CIRCLE_BRANCH"
+  #.$(date +%Y%m%d)
+  docker build -t "$REGISTRY/$IMAGE:$IMAGE_TAG" -f "$DOCKERFILE $BUILD_CONTEXT"
+  docker push "$REGISTRY/$IMAGE:$IMAGE_TAG"
 
-  if [ "$CIRCLE_BRANCH" = "master" ] ; then
-    docker tag "$REGISTRY/$GOOGLE_PROJECT_ID/$CIRCLE_PROJECT_REPONAME:$CIRCLE_USERNAME.$(date +%Y%m%d).$CIRCLE_BRANCH" "$REGISTRY/$GOOGLE_PROJECT_ID/$CIRCLE_PROJECT_REPONAME:latest"
-    docker push "$REGISTRY/$GOOGLE_PROJECT_ID/$CIRCLE_PROJECT_REPONAME:latest"
+  if [ "$IMAGE_TAG" = "master" ] ; then
+    docker tag "$REGISTRY/$IMAGE:$IMAGE_TAG" "$REGISTRY/$IMAGE:$IMAGE_TAG:latest"
+    docker push "$REGISTRY/$IMAGE:$IMAGE_TAG:latest"
   fi
 }
