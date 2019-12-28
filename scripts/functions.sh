@@ -23,7 +23,7 @@ docker_build() {
   docker push "$REGISTRY/$IMAGE:$IMAGE_TAG"
 
   if [ "$IMAGE_TAG" = "master" ] ; then
-    docker tag "$REGISTRY/$IMAGE:$IMAGE_TAG" "$REGISTRY/$IMAGE:$IMAGE_TAG:latest"
-    docker push "$REGISTRY/$IMAGE:$IMAGE_TAG:latest"
+    docker tag "$REGISTRY/$IMAGE:$IMAGE_TAG" "$REGISTRY/$IMAGE:latest"
+    docker push "$REGISTRY/$IMAGE:latest"
   fi
 }
